@@ -3,195 +3,195 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>squash solo session</title>
+  <title>squash session builder</title>
   <style>
     body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #fdfdfd;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 40px;
+      background: #fdfcfb;
       color: #222;
-      padding: 40px 20px;
-      max-width: 600px;
-      margin: auto;
       text-transform: lowercase;
     }
 
     h1 {
+      font-size: 32px;
       font-weight: bold;
-      text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     label {
-      font-weight: bold;
       display: block;
-      margin: 20px 0 5px;
+      font-weight: bold;
+      margin-top: 20px;
     }
 
-    select {
-      width: 100%;
-      padding: 10px;
-      font-weight: bold;
-      font-family: inherit;
-      font-size: 1em;
-      margin-bottom: 15px;
-      background-color: #fff;
+    select, button {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 8px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      width: 100%;
+      font-weight: bold;
       text-transform: lowercase;
     }
 
     button {
-      background-color: #4caf50;
+      background-color: #222;
       color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1em;
       cursor: pointer;
-      width: 100%;
-      margin-top: 20px;
+      margin-top: 24px;
     }
 
     .session {
       margin-top: 40px;
     }
 
-    .step {
-      margin-bottom: 10px;
-      line-height: 1.6;
+    .session-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dotted #ccc;
     }
 
-    .header {
+    .session-row.header {
       font-weight: bold;
-      margin-bottom: 10px;
+      border-bottom: 2px solid #000;
     }
 
-    .repeat {
-      margin: 20px 0;
-      font-style: italic;
-      font-weight: bold;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>squash solo session</h1>
 
-  <label for="time">how much time do you have?</label>
-  <select id="time">
-    <option>20 min</option>
-    <option>30 min</option>
-    <option>40 min</option>
-    <option>50 min</option>
-    <option>60 min</option>
-    <option>70 min</option>
-  </select>
+  <h1>squash session builder</h1>
 
-  <label for="feeling">how are you feeling today?</label>
-  <select id="feeling">
-    <option>absolutely terrible</option>
-    <option>pretty bad</option>
-    <option>meh</option>
-    <option>pretty good</option>
-    <option>amazing!</option>
-  </select>
+  <div id="form">
+    <label for="time">how much time do you have?</label>
+    <select id="time">
+      <option>20</option>
+      <option>30</option>
+      <option>40</option>
+      <option>50</option>
+      <option>60</option>
+      <option>70</option>
+    </select>
 
-  <label for="goal">what is your goal today?</label>
-  <select id="goal">
-    <option>just have fun</option>
-    <option>get in some practice</option>
-    <option>work on a skill</option>
-    <option>prep for a tournament</option>
-  </select>
+    <label for="feeling">how are you feeling today?</label>
+    <select id="feeling">
+      <option>absolutely terrible</option>
+      <option>pretty bad</option>
+      <option>meh</option>
+      <option>pretty good</option>
+      <option>amazing!</option>
+    </select>
 
-  <button onclick="generateSession()">generate my session</button>
+    <label for="goal">what is your goal today?</label>
+    <select id="goal">
+      <option>just have fun</option>
+      <option>get in some practice</option>
+      <option>work on a skill</option>
+      <option>prep for a tournament</option>
+    </select>
 
-  <div class="session" id="sessionOutput"></div>
+    <button onclick="generateSession()">generate session</button>
+  </div>
+
+  <div class="session" id="session"></div>
 
   <script>
     function generateSession() {
-      const time = document.getElementById('time').value;
-      const feeling = document.getElementById('feeling').value;
-      const goal = document.getElementById('goal').value;
+      const time = parseInt(document.getElementById("time").value);
+      const feeling = document.getElementById("feeling").value;
+      const goal = document.getElementById("goal").value;
 
-      const output = document.getElementById('sessionOutput');
-      output.innerHTML = '';
+      // hide form
+      document.getElementById("form").classList.add("hidden");
 
-      // only supporting "pretty good" + "get in some practice" for now
-      if (feeling !== 'pretty good' || goal !== 'get in some practice') {
-        output.innerHTML = '<div class="step">custom sessions for this combo coming soon :)</div>';
-        return;
-      }
+      let drills = [];
 
-      let session = [];
-
-      if (time === '70 min') {
-        session = [
-          ['1', '5 min', 't', 'volleys'],
-          ['2', '10 min', 'back', 'drives'],
-          ['3', '5 min', 'back', 'kills'],
-          ['4', '5 min', 't', 'volley drops'],
-          ['5', '5 min', 'box', 'drops from firm shot'],
-          ['repeat', '', '', 'switch sides'],
-          ['6', '5 min', 't', 'loose figure 8s'],
-          ['7', '5 min', 't', 'firm figure 8s']
-        ];
-      } else if (time === '60 min') {
-        session = [
-          ['1', '5 min', 't', 'volleys'],
-          ['2', '10 min', 'back', 'drives'],
-          ['3', '5 min', 'back', 'kills'],
-          ['4', '5 min', 't', 'volley drops'],
-          ['5', '5 min', 'box', 'drops from firm shot'],
-          ['repeat', '', '', 'switch sides']
-        ];
-      } else if (time === '50 min') {
-        session = [
-          ['1', '5 min', 't', 'volleys'],
-          ['2', '10 min', 'back', 'drives'],
-          ['3', '5 min', 'back', 'kills'],
-          ['4', '5 min', 'box', 'drops from firm shot'],
-          ['repeat', '', '', 'switch sides']
-        ];
-      } else if (time === '40 min') {
-        session = [
-          ['1', '3 min', 't', 'volleys'],
-          ['2', '7 min', 'back', 'drives'],
-          ['3', '5 min', 'back', 'kills'],
-          ['4', '5 min', 't', 'volley drops'],
-          ['5', '5 min', 'box', 'drops from firm shot'],
-          ['repeat', '', '', 'switch sides']
-        ];
-      } else if (time === '30 min') {
-        session = [
-          ['1', '5 min', 't', 'volleys'],
-          ['2', '5 min', 'back', 'drives'],
-          ['3', '2 min', 'back', 'kills'],
-          ['4', '2 min', 'box', 'drops from firm shot'],
-          ['repeat', '', '', 'switch sides']
-        ];
-      } else if (time === '20 min') {
-        session = [
-          ['1', '4 min', 't', 'firm figure 8s – forehand'],
-          ['2', '2 min', 't', 'volleys – forehand'],
-          ['3', '2 min', 'back', 'kills – forehand'],
-          ['4', '4 min', 'back', 'drives – forehand'],
-          ['repeat', '', '', 'switch to backhand'],
-          ['5', '4 min', 't', 'firm figure 8s – backhand'],
-          ['6', '2 min', 't', 'volleys – backhand'],
-          ['7', '2 min', 'back', 'kills – backhand'],
-          ['8', '4 min', 'back', 'drives – backhand']
-        ];
-      }
-
-      const header = `<div class="header">step &nbsp;&nbsp;&nbsp; time &nbsp;&nbsp;&nbsp; location &nbsp;&nbsp;&nbsp; drill</div>`;
-      const steps = session.map(step => {
-        if (step[0] === 'repeat') {
-          return `<div class="repeat">↻ ${step[3]}</div>`;
+      if (feeling === "pretty good" && goal === "get in some practice") {
+        if (time === 70) {
+          drills = [
+            ["1", "5", "t", "volleys"],
+            ["2", "10", "back", "drives"],
+            ["3", "5", "back", "kills"],
+            ["4", "5", "t", "volley drops"],
+            ["5", "5", "box", "drops from firm feed"],
+            ["repeat", "", "", "switch sides"],
+            ["6", "5", "t", "loose figure 8"],
+            ["7", "5", "t", "firm figure 8"]
+          ];
+        } else if (time === 60) {
+          drills = [
+            ["1", "5", "t", "volleys"],
+            ["2", "10", "back", "drives"],
+            ["3", "5", "back", "kills"],
+            ["4", "5", "t", "volley drops"],
+            ["5", "5", "box", "drops from firm feed"],
+            ["repeat", "", "", "switch sides"]
+          ];
+        } else if (time === 50) {
+          drills = [
+            ["1", "5", "t", "volleys"],
+            ["2", "10", "back", "drives"],
+            ["3", "5", "back", "kills"],
+            ["4", "5", "box", "drops from firm feed"],
+            ["repeat", "", "", "switch sides"]
+          ];
+        } else if (time === 40) {
+          drills = [
+            ["1", "3", "t", "volleys"],
+            ["2", "7", "back", "drives"],
+            ["3", "5", "back", "kills"],
+            ["4", "5", "t", "volley drops"],
+            ["5", "5", "box", "drops from firm feed"],
+            ["repeat", "", "", "switch sides"]
+          ];
+        } else if (time === 30) {
+          drills = [
+            ["1", "5", "t", "volleys"],
+            ["2", "5", "back", "drives"],
+            ["3", "2", "back", "kills"],
+            ["4", "2", "box", "drops from firm feed"],
+            ["repeat", "", "", "switch sides"]
+          ];
+        } else if (time === 20) {
+          drills = [
+            ["1", "4", "t", "firm figure 8 (forehand)"],
+            ["2", "2", "t", "volleys (forehand)"],
+            ["3", "2", "back", "kills (forehand)"],
+            ["4", "4", "back", "drives (forehand)"],
+            ["repeat", "", "", "do all on backhand"]
+          ];
         }
-        return `<div class="step">${step[0]}. &nbsp;&nbsp; ${step[1]} &nbsp;&nbsp; ${step[2]} &nbsp;&nbsp; ${step[3]}</div>`;
-      }).join('');
+      } else {
+        drills = [["", "", "", "sorry! this combo isn't available yet"]];
+      }
 
-      output.innerHTML = header + steps;
+      let output = `
+        <div class="session-row header">
+          <div>step</div>
+          <div>time (min)</div>
+          <div>location</div>
+          <div>drill</div>
+        </div>
+      `;
+
+      drills.forEach(([step, duration, location, drill]) => {
+        output += `
+          <div class="session-row">
+            <div>${step}</div>
+            <div>${duration}</div>
+            <div>${location}</div>
+            <div>${drill}</div>
+          </div>
+        `;
+      });
+
+      document.getElementById("session").innerHTML = output;
     }
   </script>
 </body>
