@@ -3,113 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>squash solo session</title>
+  <title>squash solo scheduler</title>
   <style>
     body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #fdfcfb;
-      color: #333;
-      margin: 40px;
-      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #fefefe;
+      padding: 40px 20px;
+      color: #222;
+      max-width: 600px;
+      margin: auto;
     }
+
     h1 {
-      text-transform: lowercase;
-      font-weight: 700;
+      text-align: center;
       font-size: 28px;
-      margin-bottom: 20px;
-    }
-    label {
       font-weight: bold;
       text-transform: lowercase;
+      margin-bottom: 30px;
+    }
+
+    label, select, button {
       display: block;
-      margin-top: 20px;
-    }
-    select {
-      font-weight: bold;
-      font-size: 15px;
-      margin-top: 5px;
-      padding: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-family: 'Helvetica Neue', sans-serif;
-      text-transform: lowercase;
-    }
-    button {
-      margin-top: 25px;
-      background-color: #5cdb95;
-      color: white;
+      margin-bottom: 20px;
       font-size: 16px;
-      padding: 10px 18px;
-      border: none;
+      text-transform: lowercase;
+      font-weight: bold;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
       border-radius: 8px;
+      border: 1px solid #aaa;
+      background-color: #fafafa;
+    }
+
+    button {
       cursor: pointer;
-      text-transform: lowercase;
+      background-color: #e2e2ff;
+      font-weight: bold;
+      transition: 0.2s;
     }
-    .session {
+
+    button:hover {
+      background-color: #cfcfff;
+    }
+
+    #session {
       margin-top: 40px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      line-height: 1.8;
     }
-    .session-title {
+
+    .bold {
       font-weight: bold;
-      text-transform: lowercase;
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-    .session-line {
-      display: flex;
-      gap: 25px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      font-family: monospace;
-    }
-    .session-line span {
-      display: inline-block;
-    }
-    .header {
-      font-weight: bold;
-      text-transform: lowercase;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
-    }
-    .switch-sides {
-      font-weight: bold;
-      margin: 10px 0;
-      display: inline-block;
     }
   </style>
 </head>
 <body>
-  <h1>squash solo session generator</h1>
+  <h1>squash solo scheduler</h1>
 
-  <label for="time">how much time do you have?</label>
+  <label for="time">a) how much time do you have?</label>
   <select id="time">
-    <option>20 min</option>
-    <option>30 min</option>
-    <option>40 min</option>
-    <option>50 min</option>
-    <option>60 min</option>
-    <option>70 min</option>
+    <option value="20">20 min</option>
+    <option value="30">30 min</option>
+    <option value="40">40 min</option>
+    <option value="50">50 min</option>
+    <option value="60" selected>60 min</option>
+    <option value="70">70 min</option>
   </select>
 
-  <label for="feeling">how are you feeling today?</label>
+  <label for="feeling">b) how are you feeling today?</label>
   <select id="feeling">
-    <option>absolutely terrible</option>
-    <option>pretty bad</option>
-    <option>meh</option>
-    <option>pretty good</option>
-    <option>amazing!</option>
+    <option value="1">absolutely terrible</option>
+    <option value="2">pretty bad</option>
+    <option value="3">meh</option>
+    <option value="4" selected>pretty good</option>
+    <option value="5">amazing!</option>
   </select>
 
-  <label for="goal">what is your goal today?</label>
+  <label for="goal">c) what is your goal today?</label>
   <select id="goal">
-    <option>just have fun</option>
-    <option>get in some practice</option>
-    <option>work on a skill</option>
-    <option>prep for a tournament</option>
+    <option value="fun">just have fun</option>
+    <option value="practice" selected>get in some practice</option>
+    <option value="skill">work on a skill</option>
+    <option value="tournament">prep for a tournament</option>
   </select>
 
   <button onclick="generateSession()">generate session</button>
 
-  <div class="session" id="session"></div>
+  <div id="session"></div>
 
   <script>
     function generateSession() {
@@ -117,124 +102,27 @@
       const feeling = document.getElementById('feeling').value;
       const goal = document.getElementById('goal').value;
 
-      const session = document.getElementById('session');
-      session.innerHTML = '';
+      const container = document.getElementById('session');
+      container.innerHTML = ''; // clear
 
-      const header = document.createElement('div');
-      header.classList.add('session-line', 'header');
-      header.innerHTML = `
-        <span style="width: 50px;">step</span>
-        <span style="width: 90px;">time (min)</span>
-        <span style="width: 100px;">location</span>
-        <span>drill</span>
-      `;
-      session.appendChild(header);
-
-      const drills = [];
-
-      if (feeling === 'pretty good' && goal === 'get in some practice') {
-        switch (time) {
-          case '70 min':
-            drills.push(
-              ["1", "5", "T", "volleys"],
-              ["2", "10", "back", "drives"],
-              ["3", "5", "back", "kills"],
-              ["4", "5", "T", "volley drops"],
-              ["5", "5", "box", "drops from feed"],
-              ["→", "", "", "**switch sides**"],
-              ["6", "5", "T", "volleys"],
-              ["7", "10", "back", "drives"],
-              ["8", "5", "back", "kills"],
-              ["9", "5", "T", "volley drops"],
-              ["10", "5", "box", "drops from feed"],
-              ["11", "5", "T", "loose figure 8s"],
-              ["12", "5", "T", "firm figure 8s"]
-            );
-            break;
-          case '60 min':
-            drills.push(
-              ["1", "5", "T", "volleys"],
-              ["2", "10", "back", "drives"],
-              ["3", "5", "back", "kills"],
-              ["4", "5", "T", "volley drops"],
-              ["5", "5", "box", "drops from feed"],
-              ["→", "", "", "**switch sides**"],
-              ["6", "5", "T", "volleys"],
-              ["7", "10", "back", "drives"],
-              ["8", "5", "back", "kills"],
-              ["9", "5", "T", "volley drops"],
-              ["10", "5", "box", "drops from feed"]
-            );
-            break;
-          case '50 min':
-            drills.push(
-              ["1", "5", "T", "volleys"],
-              ["2", "10", "back", "drives"],
-              ["3", "5", "back", "kills"],
-              ["4", "5", "box", "drops from feed"],
-              ["→", "", "", "**switch sides**"],
-              ["5", "5", "T", "volleys"],
-              ["6", "10", "back", "drives"],
-              ["7", "5", "back", "kills"],
-              ["8", "5", "box", "drops from feed"]
-            );
-            break;
-          case '40 min':
-            drills.push(
-              ["1", "3", "T", "volleys"],
-              ["2", "7", "back", "drives"],
-              ["3", "5", "back", "kills"],
-              ["4", "5", "T", "volley drops"],
-              ["5", "5", "box", "drops from feed"],
-              ["→", "", "", "**switch sides**"],
-              ["6", "3", "T", "volleys"],
-              ["7", "7", "back", "drives"],
-              ["8", "5", "back", "kills"],
-              ["9", "5", "T", "volley drops"],
-              ["10", "5", "box", "drops from feed"]
-            );
-            break;
-          case '30 min':
-            drills.push(
-              ["1", "5", "T", "volleys"],
-              ["2", "5", "back", "drives"],
-              ["3", "2", "back", "kills"],
-              ["4", "2", "box", "drops from feed"],
-              ["→", "", "", "**switch sides**"],
-              ["5", "5", "T", "volleys"],
-              ["6", "5", "back", "drives"],
-              ["7", "2", "back", "kills"],
-              ["8", "2", "box", "drops from feed"]
-            );
-            break;
-          case '20 min':
-            drills.push(
-              ["1", "4", "T", "firm figure 8s"],
-              ["2", "2", "T", "volleys (forehand)"],
-              ["3", "2", "back", "kills (forehand)"],
-              ["4", "4", "back", "drives (forehand)"],
-              ["→", "", "", "**switch sides**"],
-              ["5", "2", "T", "volleys (backhand)"],
-              ["6", "2", "back", "kills (backhand)"],
-              ["7", "4", "back", "drives (backhand)"]
-            );
-            break;
-        }
+      // only coded for 60 min + pretty good + practice for now
+      if (time === "60" && feeling === "4" && goal === "practice") {
+        container.innerHTML =
+`step  time (min)  location        drill
+1     5           t              volleys
+2     10          back           drives
+3     5           back           kills
+4     5           t              volley drops
+5     5           front box      drops from feed
+↺     —           —              switch sides
+6     5           t              volleys
+7     10          back           drives
+8     5           back           kills
+9     5           t              volley drops
+10    5           front box      drops from feed`;
       } else {
-        drills.push(["", "", "", "session logic coming soon for different settings"]);
+        container.innerHTML = 'no custom session available yet for that combo!';
       }
-
-      drills.forEach(d => {
-        const line = document.createElement('div');
-        line.className = 'session-line';
-        line.innerHTML = `
-          <span style="width: 50px;">${d[0]}</span>
-          <span style="width: 90px;">${d[1]}</span>
-          <span style="width: 100px;">${d[2]}</span>
-          <span>${d[3]}</span>
-        `;
-        session.appendChild(line);
-      });
     }
   </script>
 </body>
